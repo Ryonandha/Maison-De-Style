@@ -1,8 +1,8 @@
-# Maison De Style — Premium iOS Chatbot Prototype 👗✨
+# Maison De Style — Fully Interactive & Dynamic Chatbot 👗✨
 
 Prototipe antarmuka obrolan (*high-fidelity, mobile-first*) interaktif berbasis web untuk layanan konsultasi fesyen **"Maison De Style"**.
 
-Dibangun dengan standar aplikasi iOS/Android modern premium, menggunakan **Framer Motion** untuk animasi transisi bubble pop-up yang mulus dan interaksi dinamis.
+Aplikasi ini dilengkapi dengan **Dynamic Response Engine berbasis keyword**, di mana pengguna dapat **mengetik pesan bebas** di kolom input teks, mengirimkannya (*Send / Enter*), dan menerima rekomendasi *lookbook* yang berbeda-beda secara otomatis.
 
 ---
 
@@ -23,38 +23,42 @@ Dibangun dengan standar aplikasi iOS/Android modern premium, menggunakan **Frame
 
 ---
 
-## 🎨 Premium Design System
-- **Tema Warna:**
-  - Latar Belakang: *Soft Off-White/Pink* (`bg-rose-50`)
-  - AI/Bot Bubbles: *Soft Pink* (`bg-pink-100`, `text-pink-900`)
-  - User Bubbles: *Soft Brown/Mocha* (`bg-amber-100`, `text-amber-900`)
-  - Aksen: *Muted Rose Gold* untuk tombol, border, dan highlights
-- **Layout:** *iPhone Frame Container* di tengah layar desktop dengan Dynamic Island, status bar iOS (09:41, WiFi, Signal, Battery), rounded bezel 44px, dan bayangan lembut (*soft drop shadow*).
-- **Header:** Efek *Glassmorphism* (`backdrop-blur-xl bg-white/85`) dengan chevron kembali, nama Maison De Style, badge VIP, dan titik indikator status hijau (*Online*).
-- **Input Area:** Sticky bottom chat bar dengan text placeholder dinamis, ikon lampiran (paperclip) dengan animasi pulsasi, dan tombol kirim.
+## 🧠 Dynamic Response Engine (Keyword-based Logic)
+
+Bot menganalisis pesan pengguna dan memberikan kurasi outfit beserta Lookbook Carousel yang sesuai:
+
+1. **Kondisi A: Kampus / Kuliah**
+   - **Keywords:** `kampus`, `kuliah`, `campus`, `kelas`, `skripsi`, `dosen`
+   - **Respon Stylist:** *"Cocok banget! Untuk ke kampus, gaya Smart Casual ini bakal bikin kamu tampil rapi tapi tetap nyaman seharian. Coba cek lookbook ini:"*
+   - **Lookbook Carousel:**
+     - *Oversized Blazer* — Rp 150.000
+     - *Basic White Tee* — Rp 50.000
+     - *Classic Loafers* — Rp 120.000
+
+2. **Kondisi B: Hangout / Cafe / Y2K**
+   - **Keywords:** `hangout`, `main`, `cafe`, `jalan`, `ulang tahun`, `nongkrong`, `mall`
+   - **Respon Stylist:** *"Wah, seru banget! Gaya Y2K / Casual Chic paling pas nih buat hangout. Kombinasi item ini bakal bikin kamu stand out:"*
+   - **Lookbook Carousel:**
+     - *Khaki Cargo Pants* — Rp 135.000
+     - *Ribbed Crop Top* — Rp 45.000
+     - *Baguette Shoulder Bag* — Rp 65.000
+
+3. **Kondisi C: Kerja / Interview / Formal**
+   - **Keywords:** `kerja`, `interview`, `kantor`, `formal`, `rapat`, `meeting`
+   - **Respon Stylist:** *"Untuk acara profesional, kamu butuh look yang clean dan elegan. Ini rekomendasi outfit Professional Chic di bawah budget kamu:"*
+   - **Lookbook Carousel:**
+     - *High-waist Culottes* — Rp 110.000
+     - *Silk Satin Blouse* — Rp 95.000
+     - *Pointed Heels 5cm* — Rp 140.000
+
+4. **Kondisi D: Fallback / Klarifikasi**
+   - **Jika tidak ada keyword cocok:** *"Hmm, menarik! Biar aku bisa kasih rekomendasi lookbook yang paling pas, acaranya ini lebih ke formal (kayak interview/kerja) atau santai (kayak hangout/kuliah) nih?"*
+   - Menampilkan pil saran respon cepat yang bisa langsung diklik.
 
 ---
 
-## 💬 Alur Chat Interaktif (Dynamic Chat Flow)
-
-### Phase 1: AI Kuesioner Kilat (Interactive UI)
-- Bot menyapa dan menyajikan pil opsi interaktif (clickable chips):
-  - *Row 1 (Body Shape):* `[Pear]` `[Hourglass]` `[Rectangle]`
-  - *Row 2 (Budget):* `[< Rp 150k]` `[Rp 150k - 250k]` `[> Rp 250k]`
-- Saat pengguna memilih opsi, chips bertransformasi menjadi chat bubble pengguna yang merangkum preferensi gaya.
-
-### Phase 2: Transisi & Stylist Personal
-- Bot mengonfirmasi penyimpanan data: *"Data disimpan! 📝 Menghubungkan ke Stylist profesional kami..."*
-- Delay 2 detik dengan indikator pengetikan (*Typing Indicator* 3 bouncing dots).
-- **Stylist Darafika** (dengan foto profil kurasi) menyapa dan meminta foto baju/celana di lemari untuk di-mix & match.
-- Tombol **Attachment (Paperclip)** di bar bawah berkedip/berdenyut (*pulsing animation*).
-- Saat diklik, pengguna mengirim foto baju & celana kulot khaki dari lemari.
-
-### Phase 3: Premium Lookbook Gallery
-- Delay 2.5 detik dengan indikator pengetikan Stylist Darafika.
-- Stylist merekomendasikan gaya *Y2K / Casual Chic* dan menyajikan **Lookbook Carousel** (geser horizontal) berisi 3 produk kurasi:
-  1. **Casual Chic Vibes** (Inspirasi padu padan lemari)
-  2. **Local Canvas Bag** (Totebag lokal - Rp 65.000)
-  3. **White Platform Sneakers** (Sepatu sneakers platform - Rp 120.000)
-- Stylist menanyakan keputusan checkout: *"Semua item tambahannya masih masuk budget kamu! Mau checkout sekarang atau ada yang mau diganti?"*
-- Tersedia tombol cepat: **"Checkout Paket Lengkap"** & **"Ulangi Simulasi"**.
+## 🎨 Premium UI/UX Design
+- **Theme:** Background `bg-rose-50`, Bot bubbles `bg-pink-100 text-pink-900`, User bubbles `bg-amber-100 text-amber-900`.
+- **Framer Motion:** Animasi pop-up pesan, typing indicator 3 bouncing dots (1.5 detik), dan carousel smooth layout.
+- **Input Bar Fungsional:** Input teks aktif (`value` & `onChange`), tombol send gradien, dukungan tombol `Enter`, dan tombol lampiran foto lemari.
+- **Auto-scroll:** Otomatis scroll ke bawah secara halus setiap ada pesan baru.
