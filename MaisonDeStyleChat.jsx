@@ -15,134 +15,372 @@ import {
   Wifi,
   Signal,
   Battery,
-  Camera,
   Heart,
   Check,
   Sparkle,
   ShieldCheck,
-  Tag,
-  Briefcase,
   GraduationCap,
-  Coffee
+  Coffee,
+  Briefcase,
+  User,
+  DollarSign
 } from 'lucide-react';
 
 // Stylist Avatar Constant
 const STYLIST_AVATAR =
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80';
 
-// Curated Lookbook Data by Scenario
-const LOOKBOOK_DATABASE = {
-  campus: {
-    theme: 'Smart Casual Kampus',
-    accent: 'bg-emerald-100 text-emerald-800',
-    botReply:
-      'Cocok banget! Untuk ke kampus, gaya Smart Casual ini bakal bikin kamu tampil rapi tapi tetap nyaman seharian. Coba cek lookbook ini:',
-    followUp:
-      'Item di atas fleksibel banget buat kuliah dari pagi sampai sore. Mau langsung checkout atau ada item yang mau diganti? 🎓✨',
-    items: [
-      {
-        id: 'campus-1',
-        title: 'Oversized Blazer',
-        price: 'Rp 150.000',
-        tag: 'Smart Outer',
-        image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80',
-        desc: 'Potongan oversized santai, bahan adem dan berstruktur rapi untuk presentasi kelas.',
-      },
-      {
-        id: 'campus-2',
-        title: 'Basic White Tee',
-        price: 'Rp 50.000',
-        tag: 'Essential Inner',
-        image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80',
-        desc: 'Katun combed 24s premium, menyerap keringat maksimal saat mobilitas di kampus.',
-      },
-      {
-        id: 'campus-3',
-        title: 'Classic Loafers',
-        price: 'Rp 120.000',
-        tag: 'Footwear',
-        image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&auto=format&fit=crop&q=80',
-        desc: 'Sol empuk dengan jahitan kokoh, aman dipakai jalan kaki keliling fakultas.',
-      },
-    ],
-  },
-  hangout: {
-    theme: 'Y2K / Casual Chic',
-    accent: 'bg-rose-100 text-rose-800',
-    botReply:
-      'Wah, seru banget! Gaya Y2K / Casual Chic paling pas nih buat hangout. Kombinasi item ini bakal bikin kamu stand out:',
-    followUp:
-      'Totalnya ramah di kantong dan aesthetic banget buat foto OOTD di cafe! Gimana menurutmu? ☕📸',
-    items: [
-      {
-        id: 'hangout-1',
-        title: 'Khaki Cargo Pants',
-        price: 'Rp 135.000',
-        tag: 'Statement Bottom',
-        image: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=600&auto=format&fit=crop&q=80',
-        desc: 'Model high-waist dengan banyak saku fungsional, bikin kaki terlihat jenjang dan trendi.',
-      },
-      {
-        id: 'hangout-2',
-        title: 'Ribbed Crop Top',
-        price: 'Rp 45.000',
-        tag: 'Top Pick',
-        image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80',
-        desc: 'Kain rajut halus bertekstur, nyaman dipakai nongkrong berjam-jam.',
-      },
-      {
-        id: 'hangout-3',
-        title: 'Baguette Shoulder Bag',
-        price: 'Rp 65.000',
-        tag: 'Aksesoris Chic',
-        image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
-        desc: 'Tas bahu minimalis warna earthy yang melengkapi nuansa Y2K kamu.',
-      },
-    ],
-  },
-  formal: {
-    theme: 'Professional Chic',
-    accent: 'bg-amber-100 text-amber-800',
-    botReply:
-      'Untuk acara profesional, kamu butuh look yang clean dan elegan. Ini rekomendasi outfit Professional Chic di bawah budget kamu:',
-    followUp:
-      'Perpaduan ini memberikan impresi percaya diri dan profesional seketika. Mau checkout sekarang atau ada yang ingin ditanyakan? 💼✨',
-    items: [
-      {
-        id: 'formal-1',
-        title: 'High-waist Culottes',
-        price: 'Rp 110.000',
-        tag: 'Tailored Trouser',
-        image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80',
-        desc: 'Bahan semi-wool jatuh yang rapi dan flowy, anti kusut saat duduk presentasi.',
-      },
-      {
-        id: 'formal-2',
-        title: 'Silk Satin Blouse',
-        price: 'Rp 95.000',
-        tag: 'Elegant Top',
-        image: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=600&auto=format&fit=crop&q=80',
-        desc: 'Aksen kerah mewah dengan kilau satin lembut yang memancarkan aura profesional.',
-      },
-      {
-        id: 'formal-3',
-        title: 'Pointed Heels 5cm',
-        price: 'Rp 140.000',
-        tag: 'Footwear',
-        image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80',
-        desc: 'Heels kokoh dengan bantalan tumit empuk, nyaman untuk meeting sepanjang hari.',
-      },
-    ],
-  },
-};
+/**
+ * Dynamic Lookbook Generator based on scenario, body shape, and budget.
+ * Maps pricing dynamically into cheap (<150k), medium (150k-250k), or premium (>250k).
+ * Injects shape-balancing styling rationale into the text and product descriptions.
+ */
+function generateDynamicLookbook(scenario, shape = 'Pear', budget = 'Rp 150k - 250k') {
+  const activeShape = shape || 'Pear';
+  const activeBudget = budget || 'Rp 150k - 250k';
+
+  // Determine pricing tier
+  const isBudget = activeBudget === '< Rp 150k';
+  const isPremium = activeBudget === '> Rp 250k';
+  const tier = isBudget ? 'budget' : isPremium ? 'premium' : 'medium';
+
+  // Shape specific styling notes
+  const shapeTips = {
+    Pear: 'menyeimbangkan proporsi pinggul dengan fokus siluet atasan & aksen pinggang tinggi',
+    Hourglass: 'mempertahankan keseimbangan proporsi alami dan menonjolkan lekuk pinggang',
+    Rectangle: 'menciptakan ilusi lekukan tubuh dan dimensi siluet yang dinamis',
+  };
+  const shapeTip = shapeTips[activeShape] || shapeTips['Pear'];
+
+  if (scenario === 'campus') {
+    let items = [];
+    let totalPrice = '';
+    let budgetLabel = '';
+
+    if (tier === 'budget') {
+      budgetLabel = 'Koleksi Hemat (< Rp 150k)';
+      totalPrice = 'Rp 140.000';
+      items = [
+        {
+          id: 'campus-b1',
+          title: 'Cropped Linen Outer',
+          price: 'Rp 55.000',
+          tag: 'Outer Ramah Kantong',
+          image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80',
+          desc: `Outer linen sejuk dengan potongan crop yang pas untuk menyeimbangkan siluet ${activeShape}.`,
+        },
+        {
+          id: 'campus-b2',
+          title: 'Basic White Tee 30s',
+          price: 'Rp 35.000',
+          tag: 'Inner Esensial',
+          image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80',
+          desc: 'Kaos katun combed lembut, adem dan menyerap keringat di ruang kelas.',
+        },
+        {
+          id: 'campus-b3',
+          title: 'Canvas Slip-on Shoes',
+          price: 'Rp 50.000',
+          tag: 'Sepatu Kuliah',
+          image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&auto=format&fit=crop&q=80',
+          desc: 'Sepatu slip-on simpel dan ringan untuk mobilitas aktif di kampus.',
+        },
+      ];
+    } else if (tier === 'premium') {
+      budgetLabel = 'Koleksi Premium (> Rp 250k)';
+      totalPrice = 'Rp 520.000';
+      items = [
+        {
+          id: 'campus-p1',
+          title: 'Tailored Wool-Blend Blazer',
+          price: 'Rp 210.000',
+          tag: 'Designer Outer',
+          image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80',
+          desc: `Blazer berfuring sutra dengan struktur bahu presisi, menyempurnakan siluet ${activeShape}.`,
+        },
+        {
+          id: 'campus-p2',
+          title: 'Supima Cotton Tee',
+          price: 'Rp 120.000',
+          tag: 'Luxury Inner',
+          image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80',
+          desc: 'Katun Supima grade-A anti kusut dengan handfeel ekstra halus.',
+        },
+        {
+          id: 'campus-p3',
+          title: 'Chunky Leather Loafers',
+          price: 'Rp 190.000',
+          tag: 'Platform Shoes',
+          image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&auto=format&fit=crop&q=80',
+          desc: 'Sol platform kulit asli 4cm, empuk dan memberi efek kaki jenjang.',
+        },
+      ];
+    } else {
+      // Medium: Rp 150k - 250k
+      budgetLabel = 'Best Value (Rp 150k - 250k)';
+      totalPrice = 'Rp 230.000';
+      items = [
+        {
+          id: 'campus-m1',
+          title: 'Oversized Soft Blazer',
+          price: 'Rp 110.000',
+          tag: 'Smart Outer',
+          image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80',
+          desc: `Potongan semi-formal jatuh rapi, dirancang untuk ${shapeTip}.`,
+        },
+        {
+          id: 'campus-m2',
+          title: 'Ribbed Knit Inner Top',
+          price: 'Rp 45.000',
+          tag: 'Essential Inner',
+          image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80',
+          desc: 'Kain rajut halus bertekstur, nyaman dan elastis seharian.',
+        },
+        {
+          id: 'campus-m3',
+          title: 'Classic Penny Loafers',
+          price: 'Rp 75.000',
+          tag: 'Footwear',
+          image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600&auto=format&fit=crop&q=80',
+          desc: 'Sol berdaya cengkeram empuk, aman dipakai keliling gedung fakultas.',
+        },
+      ];
+    }
+
+    return {
+      theme: `Smart Casual Kampus (${activeShape})`,
+      budgetLabel,
+      totalPrice,
+      shapeTag: activeShape,
+      budgetTag: activeBudget,
+      botReply: `Cocok banget! Untuk ke kampus, gaya Smart Casual ini bakal menyeimbangkan bentuk tubuh ${activeShape} kamu agar terlihat jenjang dan proporsional. Seluruh item juga dikurasi khusus untuk target budget ${activeBudget}. Cek lookbook ini ya:`,
+      followUp: `Total kombinasi outfit kampus untuk body shape ${activeShape} ini adalah ${totalPrice} (sesuai budget ${activeBudget}). Mau langsung checkout atau ada yang mau disesuaikan? 🎓✨`,
+      items,
+    };
+  } else if (scenario === 'hangout') {
+    let items = [];
+    let totalPrice = '';
+    let budgetLabel = '';
+
+    if (tier === 'budget') {
+      budgetLabel = 'Koleksi Hemat (< Rp 150k)';
+      totalPrice = 'Rp 130.000';
+      items = [
+        {
+          id: 'hangout-b1',
+          title: 'High-Waist Cotton Pants',
+          price: 'Rp 50.000',
+          tag: 'Casual Bottom',
+          image: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=600&auto=format&fit=crop&q=80',
+          desc: `Celana katun pinggang karet tinggi yang nyaman untuk bentuk tubuh ${activeShape}.`,
+        },
+        {
+          id: 'hangout-b2',
+          title: 'Ribbed Crop Cami',
+          price: 'Rp 35.000',
+          tag: 'Trendy Top',
+          image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80',
+          desc: 'Atasan crop knit simpel untuk nongkrong santai di cafe.',
+        },
+        {
+          id: 'hangout-b3',
+          title: 'Mini Canvas Tote',
+          price: 'Rp 45.000',
+          tag: 'Aksesoris Cafe',
+          image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
+          desc: 'Tas kain minimalis estetik untuk membawa barang esensial.',
+        },
+      ];
+    } else if (tier === 'premium') {
+      budgetLabel = 'Koleksi Premium (> Rp 250k)';
+      totalPrice = 'Rp 530.000';
+      items = [
+        {
+          id: 'hangout-p1',
+          title: 'Wide-Leg Selvedge Denim',
+          price: 'Rp 220.000',
+          tag: 'Designer Denim',
+          image: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=600&auto=format&fit=crop&q=80',
+          desc: `Jeans potongan wide-leg premium yang memberi dimensi anggun pada tubuh ${activeShape}.`,
+        },
+        {
+          id: 'hangout-p2',
+          title: 'Seamless Halter Knit Top',
+          price: 'Rp 130.000',
+          tag: 'Statement Top',
+          image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80',
+          desc: 'Rajut seamless berkualitas tinggi dengan garis leher halterneck modis.',
+        },
+        {
+          id: 'hangout-p3',
+          title: 'Vegan Leather Baguette Bag',
+          price: 'Rp 180.000',
+          tag: 'Y2K Luxury Bag',
+          image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
+          desc: 'Tas kulit sintetis premium dengan gold buckle aksen mewah.',
+        },
+      ];
+    } else {
+      // Medium: Rp 150k - 250k
+      budgetLabel = 'Best Value (Rp 150k - 250k)';
+      totalPrice = 'Rp 225.000';
+      items = [
+        {
+          id: 'hangout-m1',
+          title: 'Khaki Cargo Pants High-Waist',
+          price: 'Rp 115.000',
+          tag: 'Statement Bottom',
+          image: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=600&auto=format&fit=crop&q=80',
+          desc: `Potongan cargo high-waist yang pas untuk ${shapeTip}.`,
+        },
+        {
+          id: 'hangout-m2',
+          title: 'Square-Neck Knit Crop Top',
+          price: 'Rp 45.000',
+          tag: 'Top Pick',
+          image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80',
+          desc: 'Kerah square mempertegas garis bahu dan leher agar siluet lebih proporsional.',
+        },
+        {
+          id: 'hangout-m3',
+          title: 'Baguette Shoulder Bag',
+          price: 'Rp 65.000',
+          tag: 'Aksesoris Chic',
+          image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
+          desc: 'Tas bahu warna earthy chic yang melengkapi estetika gaya Y2K kamu.',
+        },
+      ];
+    }
+
+    return {
+      theme: `Y2K / Casual Chic (${activeShape})`,
+      budgetLabel,
+      totalPrice,
+      shapeTag: activeShape,
+      budgetTag: activeBudget,
+      botReply: `Wah, seru banget! Untuk hangout, gaya Y2K / Casual Chic ini bakal menyeimbangkan bentuk tubuh ${activeShape} kamu agar terlihat lebih ramping dan stand out di cafe. Pilihan ini disesuaikan dengan budget ${activeBudget}:`,
+      followUp: `Total lookbook hangout untuk body shape ${activeShape} ini adalah ${totalPrice} (masuk dalam target budget ${activeBudget}). Gimana menurutmu? ☕📸`,
+      items,
+    };
+  } else {
+    // Formal / Kerja / Interview
+    let items = [];
+    let totalPrice = '';
+    let budgetLabel = '';
+
+    if (tier === 'budget') {
+      budgetLabel = 'Koleksi Hemat (< Rp 150k)';
+      totalPrice = 'Rp 145.000';
+      items = [
+        {
+          id: 'formal-b1',
+          title: 'Pleated Culottes Pant',
+          price: 'Rp 55.000',
+          tag: 'Office Bottom',
+          image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80',
+          desc: `Bahan jatuh anti kusut yang memberi ilusi jenjang pada tubuh ${activeShape}.`,
+        },
+        {
+          id: 'formal-b2',
+          title: 'Basic Chiffon Blouse',
+          price: 'Rp 45.000',
+          tag: 'Clean Blouse',
+          image: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=600&auto=format&fit=crop&q=80',
+          desc: 'Kerah V rapi yang memberi kesan leher lebih jenjang untuk wawancara.',
+        },
+        {
+          id: 'formal-b3',
+          title: 'Low Block Heels 3cm',
+          price: 'Rp 45.000',
+          tag: 'Comfort Heels',
+          image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80',
+          desc: 'Hak tahu stabil anti pegal untuk seharian beraktivitas formal.',
+        },
+      ];
+    } else if (tier === 'premium') {
+      budgetLabel = 'Koleksi Premium (> Rp 250k)';
+      totalPrice = 'Rp 595.000';
+      items = [
+        {
+          id: 'formal-p1',
+          title: 'Tailored Semi-Wool Trousers',
+          price: 'Rp 240.000',
+          tag: 'Executive Trouser',
+          image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80',
+          desc: `Celana semi-wool potongan lurus presisi, memeluk pinggang ${activeShape} dengan sempurna.`,
+        },
+        {
+          id: 'formal-p2',
+          title: 'Mulberry Silk Bow Blouse',
+          price: 'Rp 160.000',
+          tag: 'Silk Luxury',
+          image: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=600&auto=format&fit=crop&q=80',
+          desc: 'Sutra murbei bertekstur anggun dengan aksen pita leher profesional.',
+        },
+        {
+          id: 'formal-p3',
+          title: 'Pointed Stiletto Heels 6cm',
+          price: 'Rp 195.000',
+          tag: 'Designer Heels',
+          image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80',
+          desc: 'Sol busa memori empuk dengan siluet lancip yang memancarkan wibawa.',
+        },
+      ];
+    } else {
+      // Medium: Rp 150k - 250k
+      budgetLabel = 'Best Value (Rp 150k - 250k)';
+      totalPrice = 'Rp 240.000';
+      items = [
+        {
+          id: 'formal-m1',
+          title: 'High-waist Semi-Wool Culottes',
+          price: 'Rp 110.000',
+          tag: 'Tailored Trouser',
+          image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80',
+          desc: `Bahan semi-wool flowy, dirancang untuk ${shapeTip}.`,
+        },
+        {
+          id: 'formal-m2',
+          title: 'Silk Satin Blouse',
+          price: 'Rp 55.000',
+          tag: 'Elegant Top',
+          image: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=600&auto=format&fit=crop&q=80',
+          desc: 'Aksen kerah mewah dengan kilau satin lembut yang profesional.',
+        },
+        {
+          id: 'formal-m3',
+          title: 'Pointed Kitten Heels 5cm',
+          price: 'Rp 75.000',
+          tag: 'Footwear',
+          image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80',
+          desc: 'Hak 5cm yang stabil dan elegan untuk wawancara maupun meeting.',
+        },
+      ];
+    }
+
+    return {
+      theme: `Professional Chic (${activeShape})`,
+      budgetLabel,
+      totalPrice,
+      shapeTag: activeShape,
+      budgetTag: activeBudget,
+      botReply: `Untuk acara profesional, gaya Professional Chic ini bakal menyeimbangkan bentuk tubuh ${activeShape} kamu agar terlihat clean, elegan, dan berwibawa. Harganya juga disesuaikan dengan target budget ${activeBudget}. Ini rekomendasinya:`,
+      followUp: `Total kombinasi profesional untuk bentuk tubuh ${activeShape} ini adalah ${totalPrice} (terjangkau dalam rentang ${activeBudget}). Mau checkout sekarang atau ada yang ingin ditanyakan? 💼✨`,
+      items,
+    };
+  }
+}
 
 export default function MaisonDeStyleChat() {
   // Input state for user free typing
   const [inputText, setInputText] = useState('');
 
-  // Questionnaire initial state selections
-  const [selectedShape, setSelectedShape] = useState(null);
-  const [selectedBudget, setSelectedBudget] = useState(null);
+  // 1. Global User Profile State (Requirement 1)
+  const [userProfile, setUserProfile] = useState({
+    shape: '',
+    budget: '',
+  });
+
   const [isQuestionnaireAnswered, setIsQuestionnaireAnswered] = useState(false);
 
   // Typing simulator state
@@ -181,20 +419,17 @@ export default function MaisonDeStyleChat() {
   // Initial Questionnaire Chip Selection Logic
   // -------------------------------------------------------------
   const handlePillSelect = (type, value) => {
-    let nextShape = selectedShape;
-    let nextBudget = selectedBudget;
+    const updatedProfile = {
+      shape: type === 'shape' ? value : userProfile.shape,
+      budget: type === 'budget' ? value : userProfile.budget,
+    };
 
-    if (type === 'shape') {
-      setSelectedShape(value);
-      nextShape = value;
-    } else if (type === 'budget') {
-      setSelectedBudget(value);
-      nextBudget = value;
-    }
+    setUserProfile(updatedProfile);
 
-    if (nextShape && nextBudget && !isQuestionnaireAnswered) {
+    // If both shape and budget have been picked, submit automatically
+    if (updatedProfile.shape && updatedProfile.budget && !isQuestionnaireAnswered) {
       setIsQuestionnaireAnswered(true);
-      submitInitialPreferences(nextShape, nextBudget);
+      submitInitialPreferences(updatedProfile.shape, updatedProfile.budget);
     }
   };
 
@@ -219,7 +454,7 @@ export default function MaisonDeStyleChat() {
         sender: 'bot',
         senderName: 'AI Style Matcher',
         timestamp: getCurrentTime(),
-        text: 'Data disimpan! 📝 Menghubungkan ke Stylist profesional kami...',
+        text: `Data disimpan! 📝 Profil kamu (${shape} • ${budget}) sedang dihubungkan ke Stylist profesional kami...`,
       };
 
       setMessages((prev) => [...prev, botAck]);
@@ -236,7 +471,7 @@ export default function MaisonDeStyleChat() {
           sender: 'stylist',
           senderName: 'Stylist Darafika',
           timestamp: getCurrentTime(),
-          text: `Halo! Aku Darafika, personal stylist kamu hari ini. Senang banget bisa bantu styling untuk body shape ${shape}! ✨\n\nKamu lagi cari outfit untuk acara apa nih? Boleh ketik langsung di kolom pesan di bawah (misalnya: ke kampus, hangout cafe, atau interview kerja)!`,
+          text: `Halo! Aku Darafika, personal stylist kamu hari ini. Senang banget bisa bantu styling untuk body shape ${shape} dengan budget ${budget}! ✨\n\nKamu lagi cari outfit untuk acara apa nih? Boleh ketik langsung di kolom pesan di bawah (misalnya: ke kampus, hangout cafe, atau interview kerja)!`,
           suggestQuickReplies: true,
         };
 
@@ -249,7 +484,7 @@ export default function MaisonDeStyleChat() {
   };
 
   // -------------------------------------------------------------
-  // Dynamic Response Engine (Keyword-based Logic)
+  // Dynamic Response Engine (Keyword & Profile Driven)
   // -------------------------------------------------------------
   const processUserMessage = (textToSend) => {
     const trimmed = textToSend.trim();
@@ -268,6 +503,10 @@ export default function MaisonDeStyleChat() {
 
     setMessages((prev) => [...prev, userMessage]);
     setInputText('');
+
+    // Active Profile: fallback safely if user typed before selecting chips
+    const activeShape = userProfile.shape || 'Pear';
+    const activeBudget = userProfile.budget || 'Rp 150k - 250k';
 
     // 2. Trigger typing indicator for 1.5 seconds
     setIsTyping(true);
@@ -305,74 +544,76 @@ export default function MaisonDeStyleChat() {
       ].some((k) => lower.includes(k));
 
       if (isCampus) {
-        // Condition A: Campus / Kuliah
-        const data = LOOKBOOK_DATABASE.campus;
+        // Condition A: Campus / Kuliah (Dynamically mapped with userProfile.shape & budget)
+        const lookbookData = generateDynamicLookbook('campus', activeShape, activeBudget);
+
         const botResponse = {
           id: `reply-${Date.now()}`,
           sender: 'stylist',
           senderName: 'Stylist Darafika',
           timestamp: getCurrentTime(),
-          text: data.botReply,
-          lookbook: data,
+          text: lookbookData.botReply,
+          lookbook: lookbookData,
         };
         const followUpResponse = {
           id: `followup-${Date.now()}`,
           sender: 'stylist',
           senderName: 'Stylist Darafika',
           timestamp: getCurrentTime(),
-          text: data.followUp,
+          text: lookbookData.followUp,
           hasActionButtons: true,
         };
         setMessages((prev) => [...prev, botResponse, followUpResponse]);
       } else if (isHangout) {
-        // Condition B: Hangout / Cafe / Y2K
-        const data = LOOKBOOK_DATABASE.hangout;
+        // Condition B: Hangout / Cafe / Y2K (Dynamically mapped)
+        const lookbookData = generateDynamicLookbook('hangout', activeShape, activeBudget);
+
         const botResponse = {
           id: `reply-${Date.now()}`,
           sender: 'stylist',
           senderName: 'Stylist Darafika',
           timestamp: getCurrentTime(),
-          text: data.botReply,
-          lookbook: data,
+          text: lookbookData.botReply,
+          lookbook: lookbookData,
         };
         const followUpResponse = {
           id: `followup-${Date.now()}`,
           sender: 'stylist',
           senderName: 'Stylist Darafika',
           timestamp: getCurrentTime(),
-          text: data.followUp,
+          text: lookbookData.followUp,
           hasActionButtons: true,
         };
         setMessages((prev) => [...prev, botResponse, followUpResponse]);
       } else if (isFormal) {
-        // Condition C: Kerja / Interview / Kantor
-        const data = LOOKBOOK_DATABASE.formal;
+        // Condition C: Kerja / Interview / Kantor (Dynamically mapped)
+        const lookbookData = generateDynamicLookbook('formal', activeShape, activeBudget);
+
         const botResponse = {
           id: `reply-${Date.now()}`,
           sender: 'stylist',
           senderName: 'Stylist Darafika',
           timestamp: getCurrentTime(),
-          text: data.botReply,
-          lookbook: data,
+          text: lookbookData.botReply,
+          lookbook: lookbookData,
         };
         const followUpResponse = {
           id: `followup-${Date.now()}`,
           sender: 'stylist',
           senderName: 'Stylist Darafika',
           timestamp: getCurrentTime(),
-          text: data.followUp,
+          text: lookbookData.followUp,
           hasActionButtons: true,
         };
         setMessages((prev) => [...prev, botResponse, followUpResponse]);
       } else {
-        // Condition D: Fallback / Clarification
+        // Condition D: Fallback / Clarification (Dynamically mentions userProfile)
         const fallbackResponse = {
           id: `reply-fallback-${Date.now()}`,
           sender: 'stylist',
           senderName: 'Stylist Darafika',
           timestamp: getCurrentTime(),
-          text:
-            'Hmm, menarik! Biar aku bisa kasih rekomendasi lookbook yang paling pas, acaranya ini lebih ke formal (kayak interview/kerja) atau santai (kayak hangout/kuliah) nih? 😊',
+          text: `Hmm, menarik! Biar aku bisa kasih rekomendasi lookbook yang paling pas buat menyeimbangkan bentuk tubuh ${activeShape} kamu di bawah budget ${activeBudget}, acaranya ini lebih ke formal (kayak interview/kerja) atau santai (kayak hangout/kuliah) nih? 😊`,
           suggestQuickReplies: true,
         };
         setMessages((prev) => [...prev, fallbackResponse]);
@@ -388,8 +629,7 @@ export default function MaisonDeStyleChat() {
   // Reset entire conversation
   const handleReset = () => {
     setInputText('');
-    setSelectedShape(null);
-    setSelectedBudget(null);
+    setUserProfile({ shape: '', budget: '' });
     setIsQuestionnaireAnswered(false);
     setIsTyping(false);
     setIsStylistActive(false);
@@ -507,10 +747,17 @@ export default function MaisonDeStyleChat() {
                 </div>
               </div>
 
-              {/* Verified Badge */}
-              <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-100/90 to-rose-100/90 border border-amber-300/60 text-[#74452e] text-[10px] font-semibold shadow-2xs">
-                <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
-                <span>Personal Stylist</span>
+              {/* Active Profile Indicator Badge */}
+              <div className="flex flex-col items-end gap-0.5">
+                <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-100/90 to-rose-100/90 border border-amber-300/60 text-[#74452e] text-[10px] font-semibold shadow-2xs">
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
+                  <span>Personal Stylist</span>
+                </div>
+                {userProfile.shape && (
+                  <span className="text-[9px] font-bold text-rose-800 bg-rose-100/80 px-1.5 py-0.2 rounded-sm border border-rose-200">
+                    {userProfile.shape} • {userProfile.budget}
+                  </span>
+                )}
               </div>
             </div>
           </header>
@@ -588,15 +835,15 @@ export default function MaisonDeStyleChat() {
                                 <label className="text-[11px] font-bold text-pink-900 tracking-wide uppercase">
                                   1. Body Shape
                                 </label>
-                                {selectedShape && (
+                                {userProfile.shape && (
                                   <span className="text-[10px] text-pink-700 font-semibold">
-                                    Dipilih: {selectedShape}
+                                    Dipilih: {userProfile.shape}
                                   </span>
                                 )}
                               </div>
                               <div className="flex flex-wrap gap-1.5">
                                 {['Pear', 'Hourglass', 'Rectangle'].map((shape) => {
-                                  const isSelected = selectedShape === shape;
+                                  const isSelected = userProfile.shape === shape;
                                   return (
                                     <button
                                       key={shape}
@@ -622,15 +869,15 @@ export default function MaisonDeStyleChat() {
                                 <label className="text-[11px] font-bold text-pink-900 tracking-wide uppercase">
                                   2. Target Budget
                                 </label>
-                                {selectedBudget && (
+                                {userProfile.budget && (
                                   <span className="text-[10px] text-pink-700 font-semibold">
-                                    Dipilih: {selectedBudget}
+                                    Dipilih: {userProfile.budget}
                                   </span>
                                 )}
                               </div>
                               <div className="flex flex-wrap gap-1.5">
                                 {['< Rp 150k', 'Rp 150k - 250k', '> Rp 250k'].map((budget) => {
-                                  const isSelected = selectedBudget === budget;
+                                  const isSelected = userProfile.budget === budget;
                                   return (
                                     <button
                                       key={budget}
@@ -651,20 +898,33 @@ export default function MaisonDeStyleChat() {
                             </div>
 
                             <div className="text-[10px] text-pink-800/80 italic text-center pt-1 font-medium">
-                              Ketuk pilihan di atas atau ketik pesan langsung di bawah ✨
+                              Ketuk pilihan di atas untuk menyesuaikan lookbook & harga ✨
                             </div>
                           </div>
                         )}
 
-                        {/* Dynamic Lookbook Carousel (Rendered when condition matches) */}
+                        {/* Dynamic Lookbook Carousel (Driven by Shape & Budget) */}
                         {msg.lookbook && (
                           <div className="mt-3 pt-3 border-t border-pink-200/70">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-[11px] font-bold text-pink-900 uppercase tracking-wider flex items-center gap-1">
-                                <Sparkle className="w-3 h-3 text-rose-600" />
-                                {msg.lookbook.theme}
+                            
+                            {/* Lookbook Profile Indicator Banner */}
+                            <div className="bg-white/80 rounded-xl p-2 mb-2 border border-pink-200 flex items-center justify-between shadow-2xs">
+                              <div className="flex items-center gap-1 text-[10px] font-bold text-stone-800">
+                                <Sparkle className="w-3.5 h-3.5 text-rose-600" />
+                                <span>{msg.lookbook.theme}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <span className="text-[9px] bg-rose-100 text-rose-800 font-bold px-1.5 py-0.2 rounded-md">
+                                  {msg.lookbook.budgetLabel}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between mb-1.5 px-0.5">
+                              <span className="text-[10px] text-pink-900 font-semibold">
+                                Total Look: <strong className="text-rose-700 font-extrabold">{msg.lookbook.totalPrice}</strong>
                               </span>
-                              <span className="text-[10px] font-medium text-pink-700">Geser ➔</span>
+                              <span className="text-[10px] font-medium text-pink-700">Geser Kartu ➔</span>
                             </div>
 
                             {/* Horizontal Scrollable Carousel */}
@@ -681,7 +941,7 @@ export default function MaisonDeStyleChat() {
                                       alt={item.title}
                                       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                                     />
-                                    <span className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-md backdrop-blur-md shadow-xs bg-white/90 text-stone-800 border border-stone-200">
+                                    <span className="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-md backdrop-blur-md shadow-xs bg-white/95 text-stone-800 border border-stone-200">
                                       {item.tag}
                                     </span>
                                     <button
@@ -708,7 +968,7 @@ export default function MaisonDeStyleChat() {
                                         {item.price}
                                       </span>
                                       <span className="text-[10px] font-semibold text-stone-400 flex items-center gap-0.5">
-                                        Detail <ChevronRight className="w-3 h-3" />
+                                        Pilih <ChevronRight className="w-3 h-3" />
                                       </span>
                                     </div>
                                   </div>
@@ -723,7 +983,7 @@ export default function MaisonDeStyleChat() {
                           <div className="mt-2 pt-2 border-t border-pink-200/70 flex gap-1.5">
                             <button
                               type="button"
-                              onClick={() => processUserMessage('Mau checkout paket lookbook ini sekarang! 🛍️')}
+                              onClick={() => processUserMessage(`Mau checkout paket ${msg.lookbook?.theme || 'lookbook'} sekarang! 🛍️`)}
                               className="flex-1 py-1.5 px-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 text-white rounded-lg text-[10px] font-bold shadow-2xs flex items-center justify-center gap-1 active:scale-95"
                             >
                               <ShoppingBag className="w-3 h-3" />
@@ -836,7 +1096,11 @@ export default function MaisonDeStyleChat() {
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Ketik acara kamu (misal: kampus, hangout, kantor)..."
+                  placeholder={
+                    userProfile.shape
+                      ? `Ketik acara untuk ${userProfile.shape} (misal: kampus, hangout, kantor)...`
+                      : 'Ketik acara kamu (misal: kampus, hangout, kantor)...'
+                  }
                   className="w-full bg-stone-100/90 hover:bg-stone-100 focus:bg-white rounded-2xl px-3.5 py-2 text-xs text-stone-900 placeholder:text-stone-400 border border-stone-200/80 focus:border-rose-300 focus:ring-2 focus:ring-rose-200 focus:outline-hidden transition-all"
                 />
               </div>
@@ -857,8 +1121,16 @@ export default function MaisonDeStyleChat() {
             </form>
 
             <div className="flex items-center justify-between text-[10px] text-stone-400 mt-1.5 px-1 font-medium">
-              <span>Tekan Enter ↵ untuk mengirim</span>
-              <span>Coba: "kampus", "hangout", "kantor"</span>
+              <span>Tekan Enter ↵ untuk kirim</span>
+              <span>
+                {userProfile.shape ? (
+                  <span className="text-rose-600 font-semibold">
+                    Profil: {userProfile.shape} ({userProfile.budget})
+                  </span>
+                ) : (
+                  'Pilih chip di atas untuk filter harga'
+                )}
+              </span>
             </div>
           </div>
 
@@ -870,9 +1142,9 @@ export default function MaisonDeStyleChat() {
 
         {/* Presentation Context Footer */}
         <div className="mt-3 text-center text-[11px] text-[#784d3d]/90 font-medium max-w-xs">
-          <p className="font-semibold text-stone-800">Maison De Style &bull; Fully Interactive Engine</p>
+          <p className="font-semibold text-stone-800">Maison De Style &bull; Profile-Driven Engine</p>
           <p className="text-[10px] text-stone-500 mt-0.5">
-            Dynamic keywords analyzer &bull; Free-text typing &bull; Multi-scenario lookbooks
+            Body Shape &amp; Budget dynamically customize lookbook text, items &amp; pricing
           </p>
         </div>
       </div>
