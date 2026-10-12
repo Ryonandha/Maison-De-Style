@@ -1,8 +1,8 @@
-# Maison De Style — Interactive Chatbot Prototype 👗✨
+# Maison De Style — Premium iOS Chatbot Prototype 👗✨
 
-Prototipe antarmuka obrolan (*mobile-first*) interaktif berbasis web untuk layanan konsultasi fesyen **"Maison De Style"**.
+Prototipe antarmuka obrolan (*high-fidelity, mobile-first*) interaktif berbasis web untuk layanan konsultasi fesyen **"Maison De Style"**.
 
-Aplikasi ini mensimulasikan alur percakapan otomatis di mana **AI Style Matcher** mengumpulkan data preferensi pengguna, lalu menghubungkan pengguna ke **Stylist Profesional (Stylist Darafika)** yang memberikan kurasi rekomendasi gaya & *lookbook*.
+Dibangun dengan standar aplikasi iOS/Android modern premium, menggunakan **Framer Motion** untuk animasi transisi bubble pop-up yang mulus dan interaksi dinamis.
 
 ---
 
@@ -23,40 +23,38 @@ Aplikasi ini mensimulasikan alur percakapan otomatis di mana **AI Style Matcher*
 
 ---
 
-## 🎨 Design System & Styling
+## 🎨 Premium Design System
 - **Tema Warna:**
-  - *Soft Pink* (`bg-pink-50`, `bg-pink-100`, `text-pink-800`, dll) untuk pesan AI & Stylist
-  - *Soft Brown / Warm Beige* (`bg-amber-100`, `text-amber-950`, border `border-amber-200`) untuk bubble chat pengguna
-- **Layout:** *Mobile frame mockup* (iPhone-style) di tengah layar lengkap dengan status bar waktu/baterai, Dynamic Island, dan bayangan estetis.
-- **Header:** Sticky header dengan logo Sparkles/UserCheck, brand "Maison De Style", dan indikator status *Online / VIP Consult*.
+  - Latar Belakang: *Soft Off-White/Pink* (`bg-rose-50`)
+  - AI/Bot Bubbles: *Soft Pink* (`bg-pink-100`, `text-pink-900`)
+  - User Bubbles: *Soft Brown/Mocha* (`bg-amber-100`, `text-amber-900`)
+  - Aksen: *Muted Rose Gold* untuk tombol, border, dan highlights
+- **Layout:** *iPhone Frame Container* di tengah layar desktop dengan Dynamic Island, status bar iOS (09:41, WiFi, Signal, Battery), rounded bezel 44px, dan bayangan lembut (*soft drop shadow*).
+- **Header:** Efek *Glassmorphism* (`backdrop-blur-xl bg-white/85`) dengan chevron kembali, nama Maison De Style, badge VIP, dan titik indikator status hijau (*Online*).
+- **Input Area:** Sticky bottom chat bar dengan text placeholder dinamis, ikon lampiran (paperclip) dengan animasi pulsasi, dan tombol kirim.
 
 ---
 
-## 💬 Simulasi Alur Chat (Chat Flow)
+## 💬 Alur Chat Interaktif (Dynamic Chat Flow)
 
-1. **Langkah 1: AI Bot Introduction & Form Inline**
-   - AI Bot menyapa pengguna dan menyajikan formulir interaktif di dalam bubble chat:
-     - Rentang Usia: `< 18`, `18-30`, `30+`
-     - Body Shape: `Pear`, `Hourglass`, `Rectangle`
-     - Budget: `< Rp 150k`, `Rp 150k - Rp 250k`, `Rp 250k - Rp 500k`, `Flexible`
-   - Tombol: **"Kirim Data Preferensi"**
+### Phase 1: AI Kuesioner Kilat (Interactive UI)
+- Bot menyapa dan menyajikan pil opsi interaktif (clickable chips):
+  - *Row 1 (Body Shape):* `[Pear]` `[Hourglass]` `[Rectangle]`
+  - *Row 2 (Budget):* `[< Rp 150k]` `[Rp 150k - 250k]` `[> Rp 250k]`
+- Saat pengguna memilih opsi, chips bertransformasi menjadi chat bubble pengguna yang merangkum preferensi gaya.
 
-2. **Langkah 2: Transisi Matching**
-   - Preferensi pengguna terkirim sebagai chat bubble kanan (warna Soft Brown).
-   - Bot membalas: *"Data diterima! Sebentar ya, AI kami sedang menganalisis kecocokan... Menghubungkan kamu ke Stylist Profesional kami. ⏳"*
-   - Animasi delay 2 detik dengan indikator pengetikan/pencarian stylist.
+### Phase 2: Transisi & Stylist Personal
+- Bot mengonfirmasi penyimpanan data: *"Data disimpan! 📝 Menghubungkan ke Stylist profesional kami..."*
+- Delay 2 detik dengan indikator pengetikan (*Typing Indicator* 3 bouncing dots).
+- **Stylist Darafika** (dengan foto profil kurasi) menyapa dan meminta foto baju/celana di lemari untuk di-mix & match.
+- Tombol **Attachment (Paperclip)** di bar bawah berkedip/berdenyut (*pulsing animation*).
+- Saat diklik, pengguna mengirim foto baju & celana kulot khaki dari lemari.
 
-3. **Langkah 3: Stylist Masuk**
-   - Stylist Darafika menyapa dan menanyakan detail acara & pakaian *basic* yang dimiliki.
-   - Tersedia tombol respon cepat: *"Balas: Buat hangout, ada kulot hitam & kemeja putih"*.
-
-4. **Langkah 4: Lookbook & Rekomendasi Outfit**
-   - Delay 1.5 detik dengan *typing indicator*.
-   - Stylist memberikan saran padu padan kulot high-waist & kemeja putih oversized.
-   - Menampilkan kartu visual Lookbook (Unsplash fashion aesthetic image) lengkap dengan tag gaya.
-   - Rekomendasi pelengkap totebag lokal dengan total di bawah target budget pengguna.
-
-5. **Fitur Presenter & Interaktivitas Tambahan**
-   - Auto-scroll mulus ke bawah setiap pesan baru muncul.
-   - Animasi fade-in halus pada setiap chat bubble.
-   - Tombol **"Reset Flow"** di kanan atas dan bawah untuk mengulang demonstrasi kapan saja.
+### Phase 3: Premium Lookbook Gallery
+- Delay 2.5 detik dengan indikator pengetikan Stylist Darafika.
+- Stylist merekomendasikan gaya *Y2K / Casual Chic* dan menyajikan **Lookbook Carousel** (geser horizontal) berisi 3 produk kurasi:
+  1. **Casual Chic Vibes** (Inspirasi padu padan lemari)
+  2. **Local Canvas Bag** (Totebag lokal - Rp 65.000)
+  3. **White Platform Sneakers** (Sepatu sneakers platform - Rp 120.000)
+- Stylist menanyakan keputusan checkout: *"Semua item tambahannya masih masuk budget kamu! Mau checkout sekarang atau ada yang mau diganti?"*
+- Tersedia tombol cepat: **"Checkout Paket Lengkap"** & **"Ulangi Simulasi"**.
